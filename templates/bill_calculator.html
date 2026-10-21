@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENERGYQ | Bill Calculator</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .calculator-container {
+            max-width: 620px;
+            margin: 40px auto;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 22px;
+            box-shadow: 0 8px 30px rgba(80, 70, 120, 0.10);
+            box-sizing: border-box;
+        }
+
+        .calculator-container h2 {
+            color: #66558f;
+        }
+
+        .calculator-form {
+            display: grid;
+            gap: 12px;
+        }
+
+        .calculator-form label {
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .calculator-form input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ded8ee;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .calculate-button {
+            margin-top: 15px;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: #b9a7e8;
+            color: #30234d;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .calculate-button:hover {
+            background: #a997dc;
+        }
+
+        .bill-result {
+            margin-top: 25px;
+            padding: 22px;
+            border-radius: 15px;
+            background: #e0f5e9;
+            color: #285d43;
+        }
+
+        .bill-result h2 {
+            color: #285d43;
+            font-size: 30px;
+        }
+
+        .calculator-error {
+            margin-top: 18px;
+            padding: 12px;
+            background: #ffe6e6;
+            color: #922;
+            border-radius: 10px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 22px;
+            color: #66558f;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .calculator-container {
+                margin: 20px 12px;
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">⚡ ENERGYQ</div>
+        <a href="{{ url_for('dashboard') }}" class="nav-link">
+            Dashboard
+        </a>
+    </nav>
+
+    <main class="dashboard">
+
+        <section class="dashboard-heading">
+            <p class="eyebrow">SMARTER ENERGY, SMARTER SAVINGS</p>
+            <h1>🧮 Electricity Bill Calculator</h1>
+            <p>Calculate your estimated electricity cost in seconds.</p>
+        </section>
+
+        <section class="calculator-container">
+
+            <h2>Calculate Your Bill 💡</h2>
+
+            <p>Enter your monthly electricity consumption and rate.</p>
+
+            <form method="POST"
+                  action="{{ url_for('bill_calculator') }}"
+                  class="calculator-form">
+
+                <label for="units">Electricity Consumed (kWh)</label>
+                <input
+                    type="number"
+                    id="units"
+                    name="units"
+                    min="0"
+                    step="any"
+                    value="{{ units }}"
+                    placeholder="Example: 200"
+                    required
+                >
+
+                <label for="rate">Rate per Unit (₹)</label>
+                <input
+                    type="number"
+                    id="rate"
+                    name="rate"
+                    min="0"
+                    step="any"
+                    value="{{ rate }}"
+                    required
+                >
+
+                <button type="submit" class="calculate-button">
+                    Calculate My Bill ⚡
+                </button>
+
+            </form>
+
+            {% if bill is not none %}
+                <div class="bill-result">
+                    <p>Estimated Electricity Bill</p>
+                    <h2>₹{{ "%.2f"|format(bill) }}</h2>
+                    <p>{{ units }} units × ₹{{ rate }} per unit</p>
+                    <small>
+                        Demonstration estimate only. Fixed charges,
+                        taxes and tariff slabs are not included.
+                    </small>
+                </div>
+            {% endif %}
+
+            {% if error %}
+                <div class="calculator-error">{{ error }}</div>
+            {% endif %}
+
+            <a href="{{ url_for('dashboard') }}" class="back-link">
+                ← Back to Dashboard
+            </a>
+
+        </section>
+
+        <footer class="dashboard-footer">
+            ENERGYQ © 2026 · Smarter Energy, Better Living 💜
+        </footer>
+
+    </main>
+
+</body>
+</html>

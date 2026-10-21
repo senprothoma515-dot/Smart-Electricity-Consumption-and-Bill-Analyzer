@@ -1,0 +1,362 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENERGYQ | AI Energy Assistant</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f0f7ff;
+            color: #243047;
+        }
+
+        header {
+            background: #ffffff;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #dce8f5;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #1675c1;
+        }
+
+        header a {
+            text-decoration: none;
+            color: #1675c1;
+            font-weight: bold;
+        }
+
+        main {
+            max-width: 850px;
+            margin: 35px auto;
+            padding: 0 16px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .intro h1 {
+            margin-bottom: 10px;
+            color: #185b91;
+        }
+
+        .intro p {
+            color: #63748a;
+            line-height: 1.6;
+        }
+
+        .chat-card {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid #dce8f5;
+            box-shadow: 0 8px 28px rgba(35, 90, 140, 0.08);
+        }
+
+        .chat-header {
+            background: #dff0ff;
+            padding: 18px 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            background: #ffffff;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: grid;
+            place-items: center;
+            font-size: 24px;
+        }
+
+        .chat-header h2 {
+            font-size: 17px;
+            margin: 0 0 5px;
+        }
+
+        .chat-header p {
+            margin: 0;
+            color: #58738c;
+            font-size: 13px;
+        }
+
+        #messages {
+            height: 380px;
+            overflow-y: auto;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 13px 16px;
+            border-radius: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .bot {
+            align-self: flex-start;
+            background: #eef6ff;
+            border-bottom-left-radius: 4px;
+        }
+
+        .user {
+            align-self: flex-end;
+            background: #1976c9;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .suggestions {
+            padding: 0 22px 18px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .suggestions button {
+            border: 1px solid #b8d8f3;
+            background: #ffffff;
+            color: #1769aa;
+            border-radius: 20px;
+            padding: 9px 12px;
+            cursor: pointer;
+        }
+
+        .suggestions button:hover {
+            background: #eaf5ff;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+            padding: 16px;
+            border-top: 1px solid #e3ebf4;
+        }
+
+        #question {
+            flex: 1;
+            min-width: 0;
+            padding: 14px;
+            border: 1px solid #cbd9e8;
+            border-radius: 10px;
+            font-size: 15px;
+            outline-color: #1976c9;
+        }
+
+        #send {
+            border: none;
+            border-radius: 10px;
+            padding: 0 22px;
+            background: #1976c9;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #send:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .note {
+            font-size: 12px;
+            color: #728197;
+            text-align: center;
+            padding: 0 18px 18px;
+        }
+
+        @media (max-width: 500px) {
+            header {
+                padding: 16px;
+            }
+
+            .logo {
+                font-size: 21px;
+            }
+
+            #messages {
+                height: 350px;
+                padding: 15px;
+            }
+
+            .message {
+                max-width: 95%;
+            }
+
+            #send {
+                padding: 0 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">⚡ ENERGYQ</div>
+        <a href="/dashboard">← Back to Dashboard</a>
+    </header>
+
+    <main>
+        <section class="intro">
+            <h1>AI Energy Assistant 🤖</h1>
+            <p>
+                Ask questions about electricity usage, bill calculations,
+                and practical ways to save energy.
+            </p>
+        </section>
+
+        <section class="chat-card">
+            <div class="chat-header">
+                <div class="avatar">⚡</div>
+                <div>
+                    <h2>ENERGYQ Assistant</h2>
+                    <p>Powered by Google Gemini AI</p>
+                </div>
+            </div>
+
+            <div id="messages" aria-live="polite">
+                <div class="message bot">
+                    Hello! 👋 I'm your ENERGYQ Energy Assistant.
+                    Ask me how to reduce electricity usage,
+                    understand your bill, or save energy at home.
+                </div>
+            </div>
+
+            <div class="suggestions">
+                <button type="button"
+                    onclick="askSuggestion('How can I reduce my electricity bill?')">
+                    💡 Save electricity
+                </button>
+
+                <button type="button"
+                    onclick="askSuggestion('Which home appliances consume more electricity?')">
+                    🔌 High-energy appliances
+                </button>
+
+                <button type="button"
+                    onclick="askSuggestion('How is an electricity bill calculated?')">
+                    🧾 Bill calculation
+                </button>
+            </div>
+
+            <form id="chat-form" class="input-area">
+                <input
+                    id="question"
+                    type="text"
+                    placeholder="Ask your energy question..."
+                    maxlength="1000"
+                    autocomplete="off"
+                    required
+                >
+
+                <button id="send" type="submit">Send ➤</button>
+            </form>
+
+            <div class="note">
+                AI responses may not always be accurate.
+                Bill estimates may differ from your actual electricity tariff.
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const form = document.getElementById("chat-form");
+        const questionInput = document.getElementById("question");
+        const messages = document.getElementById("messages");
+        const sendButton = document.getElementById("send");
+
+        function addMessage(text, sender) {
+            const message = document.createElement("div");
+            message.className = "message " + sender;
+
+            // Use textContent to safely display the message.
+            message.textContent = text;
+
+            messages.appendChild(message);
+            messages.scrollTop = messages.scrollHeight;
+
+            return message;
+        }
+
+        function askSuggestion(question) {
+            questionInput.value = question;
+            form.requestSubmit();
+        }
+
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const question = questionInput.value.trim();
+
+            if (!question || sendButton.disabled) {
+                return;
+            }
+
+            addMessage(question, "user");
+            questionInput.value = "";
+            sendButton.disabled = true;
+            sendButton.textContent = "Thinking...";
+
+            const loadingMessage = addMessage(
+                "Thinking... ⚡",
+                "bot"
+            );
+
+            try {
+                const response = await fetch("/api/ai-chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ question: question })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.error || "The chatbot request failed."
+                    );
+                }
+
+                loadingMessage.textContent =
+                    data.answer || "No answer was returned.";
+
+            } catch (error) {
+                loadingMessage.textContent =
+                    "Sorry, I couldn't get an answer. " +
+                    "Please try again. (" + error.message + ")";
+            } finally {
+                sendButton.disabled = false;
+                sendButton.textContent = "Send ➤";
+                questionInput.focus();
+                messages.scrollTop = messages.scrollHeight;
+            }
+        });
+    </script>
+</body>
+</html>
+

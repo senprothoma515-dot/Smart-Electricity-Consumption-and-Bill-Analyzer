@@ -1,0 +1,372 @@
+
+/* =================================
+   ENERGYQ - Pastel Website Theme
+   ================================= */
+
+:root {
+    --lavender: #e9e3ff;
+    --mint: #ddf5e8;
+    --peach: #ffe7d8;
+    --sky: #dff0ff;
+    --purple: #7964c7;
+    --dark: #302d49;
+    --muted: #77748b;
+    --white: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: var(--dark);
+    min-height: 100vh;
+    background:
+        radial-gradient(ellipse at 10% 10%,
+            #eee8ff 0%, transparent 38%),
+        radial-gradient(ellipse at 90% 30%,
+            #ddf5e8 0%, transparent 35%),
+        radial-gradient(ellipse at 60% 100%,
+            #ffe7d8 0%, transparent 35%),
+        #f9f8ff;
+}
+
+/* Navigation bar */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 8%;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #ebe7f6;
+}
+
+.logo {
+    font-size: 29px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--purple);
+}
+
+/* Main welcome section */
+
+.hero {
+    min-height: 78vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 65px 22px;
+    animation: appear 0.8s ease;
+}
+
+.hero h1 {
+    max-width: 850px;
+    font-size: clamp(34px, 5vw, 58px);
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    margin-bottom: 22px;
+    color: var(--dark);
+}
+
+.hero p {
+    max-width: 650px;
+    font-size: 18px;
+    line-height: 1.9;
+    color: var(--muted);
+    margin-bottom: 32px;
+}
+
+/* Buttons */
+
+.btn {
+    display: inline-block;
+    padding: 15px 32px;
+    background: linear-gradient(135deg,
+        #9886e5, #7964c7);
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    box-shadow: 0 8px 22px rgba(121, 100, 199, 0.22);
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(121, 100, 199, 0.3);
+}
+
+/* Reusable pastel cards for future dashboard */
+
+.card {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid #eeeaf8;
+    border-radius: 22px;
+    padding: 26px;
+    box-shadow: 0 8px 30px rgba(66, 51, 105, 0.06);
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 32px rgba(66, 51, 105, 0.11);
+}
+
+.card-lavender {
+    background: var(--lavender);
+}
+
+.card-mint {
+    background: var(--mint);
+}
+
+.card-peach {
+    background: var(--peach);
+}
+
+.card-blue {
+    background: var(--sky);
+}
+
+/* Smooth entrance */
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile responsive design */
+
+@media (max-width: 600px) {
+    .navbar {
+        padding: 18px 5%;
+    }
+
+    .logo {
+        font-size: 25px;
+    }
+
+    .hero {
+        min-height: 70vh;
+        padding: 45px 20px;
+    }
+
+    .hero h1 {
+        letter-spacing: -0.5px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .btn {
+        padding: 13px 25px;
+    }
+}
+
+
+/* ENERGYQ Dashboard */
+
+.nav-link {
+    color: #7964c7;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.dashboard {
+    width: 88%;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 45px 0;
+}
+
+.dashboard-heading {
+    margin-bottom: 32px;
+}
+
+.eyebrow {
+    color: #8873cf;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+}
+
+.dashboard-heading h1 {
+    font-size: clamp(30px, 4vw, 42px);
+    margin-bottom: 12px;
+}
+
+.dashboard-heading > p:last-child {
+    color: #77748b;
+    line-height: 1.7;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.stat-card {
+    padding: 24px;
+    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,0.9);
+    box-shadow: 0 8px 25px rgba(66, 51, 105, 0.07);
+    transition: transform 0.25s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+}
+
+.lavender-card { background: #e9e3ff; }
+.mint-card { background: #ddf5e8; }
+.peach-card { background: #ffe7d8; }
+.blue-card { background: #dff0ff; }
+
+.stat-icon {
+    font-size: 28px;
+    margin-bottom: 18px;
+}
+
+.stat-card > p {
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.stat-card h2 {
+    font-size: 30px;
+    margin-bottom: 10px;
+    overflow-wrap: anywhere;
+}
+
+.stat-card h2 span {
+    font-size: 15px;
+}
+
+.stat-card small {
+    color: #625e76;
+    line-height: 1.5;
+}
+
+.welcome-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 30px;
+    margin-bottom: 28px;
+    background: linear-gradient(120deg, #f0eaff, #fcece7);
+    border-radius: 24px;
+}
+
+.welcome-panel h2 {
+    margin-bottom: 12px;
+}
+
+.welcome-panel p {
+    color: #6f6a83;
+    line-height: 1.8;
+    max-width: 650px;
+}
+
+.panel-icon {
+    font-size: 48px;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.feature-card {
+    display: block;
+    padding: 25px;
+    text-decoration: none;
+    color: #302d49;
+    background: rgba(255,255,255,0.88);
+    border: 1px solid #eee8f8;
+    border-radius: 22px;
+    box-shadow: 0 8px 25px rgba(66,51,105,0.05);
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(66,51,105,0.1);
+}
+
+.feature-card > span {
+    font-size: 30px;
+}
+
+.feature-card h3 {
+    margin: 16px 0 10px;
+}
+
+.feature-card p {
+    color: #77748b;
+    line-height: 1.7;
+    margin-bottom: 18px;
+}
+
+.feature-card strong {
+    color: #7964c7;
+}
+
+.dashboard-footer {
+    text-align: center;
+    padding: 35px 10px 10px;
+    color: #88839b;
+    font-size: 13px;
+}
+
+@media (max-width: 950px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .dashboard {
+        width: 92%;
+        padding-top: 32px;
+    }
+
+    .stats-grid,
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .welcome-panel {
+        padding: 22px;
+    }
+
+    .panel-icon {
+        font-size: 32px;
+    }
+}
+

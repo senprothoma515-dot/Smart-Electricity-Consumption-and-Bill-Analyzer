@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ENERGYQ | Usage Analysis</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .analysis-container {
+            max-width: 1100px;
+            margin: 30px auto;
+        }
+
+        .analysis-summary {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .analysis-card,
+        .analysis-panel {
+            padding: 24px;
+            background: #ffffff;
+            border-radius: 18px;
+            box-shadow: 0 6px 22px rgba(80, 70, 120, 0.08);
+            box-sizing: border-box;
+        }
+
+        .analysis-card p {
+            color: #777;
+            margin-bottom: 8px;
+        }
+
+        .analysis-card h2 {
+            color: #66558f;
+            font-size: 30px;
+            margin: 8px 0;
+            overflow-wrap: anywhere;
+        }
+
+        .analysis-panel {
+            margin: 25px 0;
+            overflow: hidden;
+        }
+
+        .analysis-panel h2 {
+            color: #66558f;
+            margin-top: 0;
+        }
+
+        .chart-row {
+            margin: 22px 0;
+        }
+
+        .chart-label {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 8px;
+            color: #514768;
+        }
+
+        .chart-track {
+            width: 100%;
+            height: 22px;
+            background: #f0edf8;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .chart-bar {
+            height: 100%;
+            min-width: 0;
+            background: linear-gradient(90deg, #b9a7e8, #91cdb5);
+            border-radius: 20px;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .analysis-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 500px;
+        }
+
+        .analysis-table th,
+        .analysis-table td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee9f5;
+        }
+
+        .analysis-table th {
+            background: #f1edfa;
+            color: #514768;
+        }
+
+        .status-increase {
+            color: #c05b55;
+            font-weight: bold;
+        }
+
+        .status-decrease {
+            color: #27835c;
+            font-weight: bold;
+        }
+
+        .status-stable {
+            color: #66558f;
+            font-weight: bold;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 12px 20px;
+            background: #e8e0fb;
+            color: #514076;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .empty-message {
+            padding: 20px;
+            background: #f8f5ff;
+            border-radius: 12px;
+            color: #66558f;
+        }
+
+        @media (max-width: 600px) {
+            .analysis-container {
+                margin: 20px 12px;
+            }
+
+            .analysis-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .analysis-panel {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">⚡ ENERGYQ</div>
+
+        <a href="{{ url_for('dashboard') }}" class="nav-link">
+            Dashboard
+        </a>
+    </nav>
+
+    <main class="dashboard">
+
+        <section class="dashboard-heading">
+            <p class="eyebrow">UNDERSTAND YOUR ENERGY</p>
+            <h1>📊 Usage Analysis</h1>
+            <p>
+                Explore your recorded electricity consumption
+                and compare changes over time.
+            </p>
+        </section>
+
+        <div class="analysis-container">
+
+            <section class="analysis-summary">
+
+                <div class="analysis-card">
+                    <p>Total Recorded Consumption</p>
+                    <h2>{{ "%.2f"|format(total_units) }} kWh</h2>
+                    <small>Sum of all recorded consumption entries</small>
+                </div>
+
+                <div class="analysis-card">
+                    <p>Records Available</p>
+                    <h2>{{ record_count }}</h2>
+                    <small>Monthly consumption records in the database</small>
+                </div>
+
+            </section>
+
+            <section class="analysis-panel">
+                <h2>Monthly Consumption Chart ⚡</h2>
+                <p>Longer bars indicate higher recorded consumption.</p>
+
+                {% if records %}
+                    {% for record in records %}
+
+                        {% if max_units > 0 %}
+                            {% set bar_width =
+                                (record['units_consumed'] / max_units * 100)|round(1) %}
+                        {% else %}
+                            {% set bar_width = 0 %}
+                        {% endif %}
+
+                        <div class="chart-row">
+
+                            <div class="chart-label">
+                                <strong>{{ record['month_year'] }}</strong>
+                                <span>
+                                    {{ "%.2f"|format(record['units_consumed']) }}
+                                    kWh
+                                </span>
+                            </div>
+
+                            <div class="chart-track">
+                                <div class="chart-bar"
+                                     style="width: {{ bar_width }}%;">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+                {% else %}
+                    <p class="empty-message">
+                        No consumption records are available yet.
+                        Add records to your database to see the chart.
+                    </p>
+                {% endif %}
+            </section>
+
+            <section class="analysis-panel">
+                <h2>Consumption History 📅</h2>
+
+                {% if records %}
+                    <div class="table-wrapper">
+                        <table class="analysis-table">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Consumption</th>
+                                    <th>Change</th>
+                                    <th>Trend</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for record in records %}
+                                    <tr>
+                                        <td>{{ record['month_year'] }}</td>
+
+                                        <td>
+                                            {{ "%.2f"|format(record['units_consumed']) }}
+                                            kWh
+                                        </td>
+
+                                        <td>
+                                            {% if record['change'] is none %}
+                                                --
+                                            {% elif record['change'] > 0 %}
+                                                +{{ record['change'] }}%
+                                            {% else %}
+                                                {{ record['change'] }}%
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            {% if record['change'] is none %}
+                                                <span class="status-stable">
+                                                    First record / unavailable
+                                                </span>
+                                            {% elif record['change'] > 0 %}
+                                                <span class="status-increase">
+                                                    ↑ Increased
+                                                </span>
+                                            {% elif record['change'] < 0 %}
+                                                <span class="status-decrease">
+                                                    ↓ Decreased
+                                                </span>
+                                            {% else %}
+                                                <span class="status-stable">
+                                                    → Stable
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="empty-message">
+                        No monthly history to display.
+                    </p>
+                {% endif %}
+            </section>
+
+            <a href="{{ url_for('dashboard') }}" class="back-button">
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+        <footer class="dashboard-footer">
+            ENERGYQ © 2026 · Smarter Energy, Better Living 💜
+        </footer>
+
+    </main>
+
+</body>
+</html>

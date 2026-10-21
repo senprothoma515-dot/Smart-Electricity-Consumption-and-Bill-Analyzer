@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Records | ENERGYQ</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f8ff;
+            color: #26344a;
+            padding: 25px;
+        }
+
+        header {
+            background: #ffffff;
+            padding: 20px 25px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 14px #dce6f3;
+            margin-bottom: 25px;
+        }
+
+        header h1 {
+            color: #3976b9;
+            font-size: 27px;
+        }
+
+        nav {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #3976b9;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .intro {
+            margin-bottom: 22px;
+        }
+
+        .intro h2 {
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .intro p {
+            color: #65738a;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 22px;
+            box-shadow: 0 4px 14px #dce6f3;
+        }
+
+        .stat-card h3 {
+            color: #68788e;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+
+        .stat-card p {
+            font-size: 28px;
+            font-weight: bold;
+            color: #3976b9;
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 4px 14px #dce6f3;
+        }
+
+        .table-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .table-heading h3 {
+            font-size: 21px;
+        }
+
+        .button {
+            display: inline-block;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 13px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .primary-button {
+            background: #dcecff;
+            color: #2867a5;
+        }
+
+        .delete-button {
+            background: #ffe3e3;
+            color: #b42332;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e8eef6;
+        }
+
+        th {
+            background: #edf5ff;
+            color: #356da9;
+        }
+
+        tr:hover td {
+            background: #fafcff;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .actions form {
+            display: inline;
+        }
+
+        .flash {
+            padding: 13px 16px;
+            margin-bottom: 18px;
+            border-radius: 9px;
+            background: #e3f7e9;
+            color: #216e39;
+        }
+
+        .empty {
+            padding: 30px;
+            text-align: center;
+            color: #68788e;
+        }
+
+        .bottom-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 22px;
+        }
+
+        .bottom-links a {
+            text-decoration: none;
+            color: #3976b9;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+
+            header {
+                padding: 17px;
+            }
+
+            .table-card {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>⚡ ENERGYQ</h1>
+
+    <nav>
+        <a href="{{ url_for('home') }}">🏠 Home</a>
+        <a href="{{ url_for('dashboard') }}">📊 Dashboard</a>
+    </nav>
+</header>
+
+<div class="container">
+
+    <div class="intro">
+        <h2>📋 Electricity Consumption Records</h2>
+        <p>View, update, and manage your monthly electricity consumption records.</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="stats">
+        <div class="stat-card">
+            <h3>🗂️ Total Records</h3>
+            <p>{{ records|length }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>⚡ Total Recorded Units</h3>
+            <p>{{ "%.2f"|format(total_units|float) }} kWh</p>
+        </div>
+    </div>
+
+    <div class="table-card">
+
+        <div class="table-heading">
+            <h3>📑 All Records</h3>
+
+            <a href="{{ url_for('add_consumption') }}"
+               class="button primary-button">
+                ➕ Add Record
+            </a>
+        </div>
+
+        {% if records %}
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Record ID</th>
+                            <th>User ID</th>
+                            <th>Month / Year</th>
+                            <th>Units Consumed</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for record in records %}
+                            <tr>
+                                <td>{{ record['record_id'] }}</td>
+                                <td>{{ record['user_id'] }}</td>
+                                <td>{{ record['month_year'] }}</td>
+                                <td>{{ record['units_consumed'] }} kWh</td>
+
+                                <td>
+                                    <div class="actions">
+
+                                        <a href="{{ url_for('edit_record', record_id=record['record_id']) }}"
+                                           class="button primary-button">
+                                            ✏️ Edit
+                                        </a>
+
+                                        <form
+                                            action="{{ url_for('delete_record', record_id=record['record_id']) }}"
+                                            method="POST"
+                                            onsubmit="return confirm('Are you sure you want to delete this consumption record? This action cannot be undone.');">
+
+                                            <button type="submit"
+                                                    class="button delete-button">
+                                                🗑️ Delete
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        {% else %}
+
+            <div class="empty">
+                <h3>📭 No records found</h3>
+                <p>Add an electricity consumption record to get started!</p>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    <div class="bottom-links">
+        <a href="{{ url_for('dashboard') }}">⬅️ Back to Dashboard</a>
+        <a href="{{ url_for('usage_analysis') }}">📈 Usage Analysis</a>
+    </div>
+
+</div>
+
+</body>
+</html>

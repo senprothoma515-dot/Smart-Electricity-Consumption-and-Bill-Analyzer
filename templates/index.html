@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ENERGYQ | Smart Electricity Analyzer</title>
+
+    <!-- Connect Pastel CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">⚡ ENERGYQ</div>
+
+        <a href="#about" class="nav-link">About Us</a>
+    </nav>
+
+    <!-- Homepage Hero Section -->
+    <main>
+
+        <section class="hero">
+
+            <p class="eyebrow">SMART ENERGY · SMARTER LIVING</p>
+
+            <h1>
+                Power Your Home.<br>
+                Understand Your Energy. ✨
+            </h1>
+
+            <p>
+                Welcome to ENERGYQ, your smart electricity
+                consumption and bill analyzer. Track your
+                electricity usage, estimate monthly bills,
+                compare consumption and make smarter energy decisions.
+            </p>
+
+            <!-- Connect to Flask Dashboard -->
+            <a href="{{ url_for('dashboard') }}" class="btn">
+                Get Started →
+            </a>
+
+        </section>
+
+        <!-- Features Section -->
+        <section id="about" class="feature-grid">
+
+            <div class="feature-card">
+                <span>⚡</span>
+
+                <h3>Track Consumption</h3>
+
+                <p>
+                    Keep track of your electricity usage
+                    and understand your consumption patterns.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <span>💰</span>
+
+                <h3>Estimate Your Bill</h3>
+
+                <p>
+                    Calculate your estimated electricity
+                    bill using your consumption data.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <span>🌱</span>
+
+                <h3>Save Energy</h3>
+
+                <p>
+                    Identify high consumption and make
+                    informed decisions to use energy wisely.
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+        ENERGYQ © 2026 · Smarter Energy, Better Living 💜
+    </footer>
+
+</body>
+</html>

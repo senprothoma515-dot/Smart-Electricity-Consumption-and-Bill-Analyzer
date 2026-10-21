@@ -1,0 +1,572 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | ENERGYQ</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fc;
+            color: #30435a;
+        }
+
+        nav {
+            background: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: 0 3px 15px rgba(40, 60, 90, 0.06);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #4979d8;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #53657d;
+            margin-left: 18px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #4979d8;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: 38px auto;
+            padding: 0 22px;
+        }
+
+        .welcome {
+            margin-bottom: 28px;
+        }
+
+        .welcome h1 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            color: #78869a;
+            line-height: 1.7;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            padding: 23px;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 5px 18px rgba(40, 60, 90, 0.05);
+            border-top: 4px solid #8eb4f5;
+        }
+
+        .stat-card:nth-child(2) {
+            border-top-color: #7ac9ae;
+        }
+
+        .stat-card:nth-child(3) {
+            border-top-color: #f0c17c;
+        }
+
+        .stat-card:nth-child(4) {
+            border-top-color: #b9a0ef;
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            color: #78869a;
+            margin-bottom: 15px;
+        }
+
+        .stat-value {
+            font-size: 25px;
+            font-weight: bold;
+            color: #405a7b;
+            overflow-wrap: anywhere;
+        }
+
+        .section-title {
+            font-size: 21px;
+            margin-bottom: 18px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+            margin-bottom: 32px;
+        }
+
+        .panel {
+            background: white;
+            padding: 24px;
+            border-radius: 15px;
+            box-shadow: 0 5px 18px rgba(40, 60, 90, 0.05);
+            min-width: 0;
+        }
+
+        .panel h2 {
+            font-size: 19px;
+            margin-bottom: 18px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 280px;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 13px 10px;
+            border-bottom: 1px solid #edf0f5;
+            font-size: 14px;
+        }
+
+        th {
+            background: #edf3ff;
+            color: #526680;
+        }
+
+        .empty-message {
+            color: #8491a3;
+            line-height: 1.7;
+            padding: 12px 0;
+        }
+
+        .appliance-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 15px 0;
+            border-bottom: 1px solid #edf0f5;
+        }
+
+        .appliance-item:last-child {
+            border-bottom: none;
+        }
+
+        .appliance-units {
+            color: #4979d8;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .features-heading {
+            margin: 35px 0 18px;
+        }
+
+        .features-heading h2 {
+            font-size: 23px;
+            margin-bottom: 8px;
+        }
+
+        .features-heading p {
+            color: #78869a;
+            line-height: 1.6;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            padding: 24px;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 5px 18px rgba(40, 60, 90, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            min-width: 0;
+            transition: transform 0.2s ease,
+                        box-shadow 0.2s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 9px 25px rgba(40, 60, 90, 0.09);
+        }
+
+        .feature-icon {
+            font-size: 29px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #78869a;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 18px;
+            flex-grow: 1;
+        }
+
+        .feature-link {
+            display: inline-block;
+            padding: 11px 15px;
+            background: #edf3ff;
+            color: #4979d8;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.2s ease;
+        }
+
+        .feature-link:hover {
+            background: #dce8ff;
+        }
+
+        .blue {
+            border-top: 4px solid #8eb4f5;
+        }
+
+        .green {
+            border-top: 4px solid #7ac9ae;
+        }
+
+        .orange {
+            border-top: 4px solid #f0c17c;
+        }
+
+        .purple {
+            border-top: 4px solid #b9a0ef;
+        }
+
+        .pink {
+            border-top: 4px solid #efa7c2;
+        }
+
+        .ai-card {
+            border-top: 4px solid #6c9be8;
+            background: linear-gradient(
+                145deg,
+                #ffffff 0%,
+                #f0f6ff 100%
+            );
+        }
+
+        .ai-card .feature-link {
+            background: #4979d8;
+            color: white;
+        }
+
+        .ai-card .feature-link:hover {
+            background: #315fb7;
+        }
+
+        footer {
+            margin-top: 45px;
+            padding: 25px;
+            text-align: center;
+            color: #8a96a8;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 950px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .feature-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 650px) {
+            nav {
+                padding: 18px 5%;
+            }
+
+            nav a {
+                margin-left: 8px;
+                font-size: 14px;
+            }
+
+            .container {
+                padding: 0 16px;
+                margin-top: 25px;
+            }
+
+            .welcome h1 {
+                font-size: 25px;
+            }
+
+            .stats-grid,
+            .content-grid,
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-value {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">⚡ ENERGYQ</div>
+
+        <div>
+            <a href="{{ url_for('home') }}">🏠 Home</a>
+            <a href="{{ url_for('dashboard') }}">📊 Dashboard</a>
+            <a href="{{ url_for('ai_chatbot_page') }}">🤖 AI Assistant</a>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <section class="welcome">
+            <h1>📊 ENERGYQ Dashboard</h1>
+            <p>
+                Welcome to your Smart Electricity Consumption and Bill
+                Analyzer. Monitor usage, estimate bills, and make
+                smarter energy decisions. ⚡🌱
+            </p>
+        </section>
+
+        <!-- DASHBOARD STATISTICS -->
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <h3>⚡ Total Recorded Consumption</h3>
+                <div class="stat-value">{{ total_units }} kWh</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>💰 Latest Estimated Bill</h3>
+                <div class="stat-value">
+                    ₹{{ "%.2f"|format(estimated_bill) }}
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <h3>📅 Latest Consumption</h3>
+                <div class="stat-value">{{ latest_units }} kWh</div>
+            </div>
+
+            <div class="stat-card">
+                <h3>🌿 Energy Tracking</h3>
+                <div class="stat-value">Active</div>
+            </div>
+
+        </section>
+
+        <!-- DATABASE INFORMATION -->
+
+        <h2 class="section-title">🗄️ Your Energy Data</h2>
+
+        <section class="content-grid">
+
+            <div class="panel">
+                <h2>📅 Recent Monthly Records</h2>
+
+                {% if monthly_records %}
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Units Consumed</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for record in monthly_records[:5] %}
+                                    <tr>
+                                        <td>{{ record["month_year"] }}</td>
+                                        <td>
+                                            {{ record["units_consumed"] }} kWh
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <br>
+
+                    <a class="feature-link"
+                       href="{{ url_for('view_records') }}">
+                        📋 View All Records
+                    </a>
+
+                {% else %}
+
+                    <p class="empty-message">
+                        📭 No monthly records available yet.
+                        Add a consumption record to get started.
+                    </p>
+
+                {% endif %}
+            </div>
+
+            <div class="panel">
+                <h2>🔌 Appliance Consumption</h2>
+
+                {% if appliances %}
+
+                    {% for appliance in appliances %}
+                        <div class="appliance-item">
+                            <span>{{ appliance["appliance_name"] }}</span>
+                            <span class="appliance-units">
+                                {{ appliance["monthly_units"] }} kWh
+                            </span>
+                        </div>
+                    {% endfor %}
+
+                {% else %}
+
+                    <p class="empty-message">
+                        📭 No appliance records found in your database.
+                    </p>
+
+                {% endif %}
+            </div>
+
+        </section>
+
+        <!-- PROJECT FEATURES -->
+
+        <section class="features-heading">
+            <h2>🚀 ENERGYQ Features</h2>
+            <p>
+                Choose a feature below to explore your electricity data.
+            </p>
+        </section>
+
+        <section class="feature-grid">
+
+            <article class="feature-card blue">
+                <div class="feature-icon">➕</div>
+                <h3>Add Consumption</h3>
+                <p>
+                    Enter monthly electricity usage and save it
+                    directly to the MySQL database.
+                </p>
+                <a class="feature-link"
+                   href="{{ url_for('add_consumption') }}">
+                    Add Record →
+                </a>
+            </article>
+
+            <article class="feature-card green">
+                <div class="feature-icon">💰</div>
+                <h3>Bill Calculator</h3>
+                <p>
+                    Estimate your electricity bill using consumption
+                    units and a rate per unit.
+                </p>
+                <a class="feature-link"
+                   href="{{ url_for('bill_calculator') }}">
+                    Calculate Bill →
+                </a>
+            </article>
+
+            <article class="feature-card orange">
+                <div class="feature-icon">📈</div>
+                <h3>Usage Analysis</h3>
+                <p>
+                    Compare recorded monthly consumption and see
+                    percentage changes between records.
+                </p>
+                <a class="feature-link"
+                   href="{{ url_for('usage_analysis') }}">
+                    Analyze Usage →
+                </a>
+            </article>
+
+            <article class="feature-card pink">
+                <div class="feature-icon">🚨</div>
+                <h3>High Usage Alert</h3>
+                <p>
+                    Check whether your latest consumption has
+                    increased significantly compared with the
+                    previous record.
+                </p>
+                <a class="feature-link"
+                   href="{{ url_for('high_usage_alert') }}">
+                    Check Alerts →
+                </a>
+            </article>
+
+            <article class="feature-card purple">
+                <div class="feature-icon">📋</div>
+                <h3>View All Records</h3>
+                <p>
+                    Browse every saved monthly consumption record,
+                    including its record ID, user ID, and units.
+                </p>
+                <a class="feature-link"
+                   href="{{ url_for('view_records') }}">
+                    View Records →
+                </a>
+            </article>
+
+            <!-- NEW AI CHATBOT FEATURE -->
+
+            <article class="feature-card ai-card">
+                <div class="feature-icon">🤖</div>
+                <h3>AI Energy Assistant</h3>
+                <p>
+                    Ask an AI assistant about electricity consumption,
+                    bill calculations, energy-saving tips, and
+                    efficient appliance usage.
+                </p>
+                <a class="feature-link"
+                   href="{{ url_for('ai_chatbot_page') }}">
+                    Chat with AI →
+                </a>
+            </article>
+
+        </section>
+
+    </main>
+
+    <footer>
+        ⚡ ENERGYQ | Smart Electricity Consumption and Bill Analyzer
+        <br>
+        💙 Track wisely. Save energy. Build a greener future. 🌱
+    </footer>
+
+</body>
+</html>
