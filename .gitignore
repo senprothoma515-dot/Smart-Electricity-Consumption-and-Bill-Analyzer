@@ -1,8 +1,22 @@
 
-.venv/
-venv/
+# Python
 __pycache__/
 *.py[cod]
-.env
 *.log
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# IDE settings
 .vscode/
+
+# Operating system files
+.DS_Store
+Thumbs.db
